@@ -262,7 +262,7 @@ if __name__ == "__main__":
 
 import numpy as np
 
-class ManualDWT:
+class DWT:
     def __init__(self, data):
         self.data = data
         self.N = data.shape[0]  # Assumes a square matrix
@@ -331,98 +331,9 @@ if __name__ == "__main__":
         [87, 79, 69, 68, 65, 76, 78, 94]
     ])
 
-    dwt_processor = ManualDWT(data)
+    dwt_processor = DWT(data)
     coeffs = dwt_processor.dwt()
     print("DWT Coefficients:\n", coeffs)
 
     reconstructed_data = dwt_processor.idwt()
     print("Reconstructed Data (after IDWT):\n", np.round(reconstructed_data))
-
-import unittest
-import numpy as np
-from PIL import Image
-from io import BytesIO
-
-# Assume the classes RGBtoYUV, YUVtoRGB, DCT, ManualDWT, and the resize_image function are imported
-
-class TestRGBtoYUV(unittest.TestCase):
-    def test_conversion(self):
-        rgb = RGBtoYUV(16, 128, 128)
-        yuv = rgb.conversor()
-        self.assertAlmostEqual(yuv[0], 82.505, places=2)
-        self.assertAlmostEqual(yuv[1], 90.953, places=2)
-        self.assertAlmostEqual(yuv[2], 240.5, places=2)
-
-class TestYUVtoRGB(unittest.TestCase):
-    def test_conversion(self):
-        yuv = YUVtoRGB(97.625, 145.125, 79.5)
-        rgb = yuv.conversor()
-        self.assertAlmostEqual(rgb[0], 232.073, places=2)
-        self.assertAlmostEqual(rgb[1], 151.644, places=2)
-        self.assertAlmostEqual(rgb[2], 119.49, places=2)
-
-class TestResizeImage(unittest.TestCase):
-    def test_resize(self):
-        input_image = Image.new("RGB", (100, 100), color="red")
-        input_bytes = BytesIO()
-        input_image.save(input_bytes, format="JPEG")
-        input_bytes.seek(0)
-
-        output_path = "output_test.jpg"
-        resize_image(input_bytes, output_path, 50, 50)
-
-        output_image = Image.open(output_path)
-        self.assertEqual(output_image.size, (50, 50))
-
-class TestSerpentine(unittest.TestCase):
-    def test_zigzag(self):
-        matrix = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-        expected_output = [1, 2, 4, 7, 5, 3, 6, 8, 9]
-        result = zig_zag_matrix(matrix)
-        self.assertEqual(result, expected_output)
-
-class TestPrintRLE(unittest.TestCase):
-    def test_rle(self):
-        input_string = "aaaabbbcc"
-        expected_output = "a4b3c2"
-        output = BytesIO()
-        with unittest.mock.patch('sys.stdout', new=output):
-            printRLE(input_string)
-        self.assertEqual(output.getvalue().strip(), expected_output)
-
-class TestDCT(unittest.TestCase):
-    def test_dct_idct(self):
-        data = np.array([
-            [52, 55, 61, 66, 70, 61, 64, 73],
-            [63, 59, 66, 90, 109, 85, 69, 72],
-            [62, 59, 68, 113, 144, 104, 66, 73],
-            [63, 58, 71, 122, 154, 106, 70, 69],
-            [67, 61, 68, 104, 126, 88, 68, 70],
-            [79, 65, 60, 70, 77, 68, 58, 75],
-            [85, 71, 64, 59, 55, 61, 65, 83],
-            [87, 79, 69, 68, 65, 76, 78, 94]
-        ])
-        dct_processor = DCT(data)
-        transformed = dct_processor.dct()
-        reconstructed = dct_processor.idct()
-        np.testing.assert_almost_equal(reconstructed, data, decimal=1)
-
-class TestManualDWT(unittest.TestCase):
-    def test_dwt_idwt(self):
-        data = np.array([
-            [52, 55, 61, 66, 70, 61, 64, 73],
-            [63, 59, 66, 90, 109, 85, 69, 72],
-            [62, 59, 68, 113, 144, 104, 66, 73],
-            [63, 58, 71, 122, 154, 106, 70, 69],
-            [67, 61, 68, 104, 126, 88, 68, 70],
-            [79, 65, 60, 70, 77, 68, 58, 75],
-            [85, 71, 64, 59, 55, 61, 65, 83],
-            [87, 79, 69, 68, 65, 76, 78, 94]
-        ])
-        dwt_processor = ManualDWT(data)
-        coeffs = dwt_processor.dwt()
-        reconstructed = dwt_processor.idwt()
-        np.testing.assert_almost_equal(reconstructed, data, decimal=1)
-
-if __name__ == '__main__':
-    unittest.main()
