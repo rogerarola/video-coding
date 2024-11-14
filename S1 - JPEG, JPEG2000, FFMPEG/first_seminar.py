@@ -81,8 +81,7 @@ def zig_zag_matrix(mat):
     col = 0
     result = []
 
-    # Boolean variable that is true if we need
-    # to increment 'row' value;
+    # Boolean variable that is true if we need to increment 'row' value;
     # otherwise, false if we increment 'col' value.
     row_inc = False
 
