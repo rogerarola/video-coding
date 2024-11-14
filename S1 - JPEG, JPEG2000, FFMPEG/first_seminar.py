@@ -1,5 +1,5 @@
 class RGBtoYUV:
-    def __init__(self, R, G, B):  # Corrected __init__ method
+    def __init__(self, R, G, B):
         self.R = R
         self.G = G
         self.B = B
@@ -17,7 +17,7 @@ yuv_values = rgb1.conversor()
 print("YUV values:", yuv_values)
 
 class YUVtoRGB:
-    def __init__(self, Y, U, V):  # Corrected __init__ method
+    def __init__(self, Y, U, V):
         self.Y = Y - 16
         self.U = U - 128
         self.V = V - 128
@@ -56,15 +56,18 @@ import subprocess
 import numpy as np
 from PIL import Image
 
-im_landscape = 'C:/Users/Nerea/OneDrive/Escritorio/Uni/4t/CAV/video-coding/S1 - JPEG, JPEG2000, FFMPEG/landscape.jpg'
+#im_landscape = 'C:/Users/Nerea/OneDrive/Escritorio/Uni/4t/CAV/video-coding/S1 - JPEG, JPEG2000, FFMPEG/landscape.jpg'
+im_landscape = "/Users/rogerarolaplanas/Documents/GitHub/video-coding/S1 - JPEG, JPEG2000, FFMPEG/landscape.jpg"
 
 def serpentine(image_path):
     
-    output_8x8 = 'C:/Users/Nerea/OneDrive/Escritorio/Uni/4t/CAV/video-coding/S1 - JPEG, JPEG2000, FFMPEG/output_8x8.jpg'
+    #output_8x8 = 'C:/Users/Nerea/OneDrive/Escritorio/Uni/4t/CAV/video-coding/S1 - JPEG, JPEG2000, FFMPEG/output_8x8.jpg'
+    output_8x8 = "/Users/rogerarolaplanas/Documents/GitHub/video-coding/S1 - JPEG, JPEG2000, FFMPEG/output_8x8.jpg"
     resize_image(im_landscape, output_8x8, 8, 8)
     img = Image.open(output_8x8)
     img_gray = img.convert("L")
-    gray_image_path = "C:/Users/Nerea/OneDrive/Escritorio/Uni/4t/CAV/video-coding/S1 - JPEG, JPEG2000, FFMPEG/output_8x8_gray.jpg"
+    #gray_image_path = "C:/Users/Nerea/OneDrive/Escritorio/Uni/4t/CAV/video-coding/S1 - JPEG, JPEG2000, FFMPEG/output_8x8_gray.jpg"
+    gray_image_path = "/Users/rogerarolaplanas/Documents/GitHub/video-coding/S1 - JPEG, JPEG2000, FFMPEG/output_8x8_gray.jpg"
     img_gray.save(gray_image_path)
     img_matrix = np.array(img_gray)
     print(img_matrix)
@@ -194,7 +197,7 @@ printRLE(st)
 import numpy as np
 
 class DCT:
-    def _init_(self, data):
+    def __init__(self, data):
         self.data = data
         self.N = data.shape[0]
 
@@ -235,7 +238,7 @@ class DCT:
         return reconstructed
 
 # Example usage
-if _name_ == "_main_":
+if __name__ == "__main__":
     data = np.array([
         [52, 55, 61, 66, 70, 61, 64, 73],
         [63, 59, 66, 90, 109, 85, 69, 72],
@@ -261,7 +264,7 @@ if _name_ == "_main_":
 import numpy as np
 
 class ManualDWT:
-    def _init_(self, data):
+    def __init__(self, data):
         self.data = data
         self.N = data.shape[0]  # Assumes a square matrix
 
@@ -316,7 +319,7 @@ class ManualDWT:
         return reconstructed
 
 # Example usage
-if _name_ == "_main_":
+if __name__ == "__main__":
 
     data = np.array([
         [52, 55, 61, 66, 70, 61, 64, 73],
@@ -330,10 +333,10 @@ if _name_ == "_main_":
     ])
 
     dwt_processor = ManualDWT(data)
-    coeffs = dwt_processor.apply_dwt()
+    coeffs = dwt_processor.dwt()
     print("DWT Coefficients:\n", coeffs)
 
-    reconstructed_data = dwt_processor.apply_idwt()
+    reconstructed_data = dwt_processor.idwt()
     print("Reconstructed Data (after IDWT):\n", np.round(reconstructed_data))
 
 import unittest
@@ -424,6 +427,3 @@ class TestManualDWT(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-
-
