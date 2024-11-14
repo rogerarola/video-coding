@@ -48,8 +48,10 @@ def resize_image(input_path, output_path, width, height):
     subprocess.run(command,check=True) 
 
 #input_image = 'C:/Users/Nerea/OneDrive/Escritorio/Uni/4t/CAV/video-coding/S1 - JPEG, JPEG2000, FFMPEG/image.jpg'
+input_image = "/Users/rogerarolaplanas/Documents/GitHub/video-coding/S1 - JPEG, JPEG2000, FFMPEG/image.jpg"
 #output_image = 'C:/Users/Nerea/OneDrive/Escritorio/Uni/4t/CAV/video-coding/S1 - JPEG, JPEG2000, FFMPEG/output_320x240.jpg'
-#resize_image(input_image, output_image, 320, 240)
+output_image = "/Users/rogerarolaplanas/Documents/GitHub/video-coding/S1 - JPEG, JPEG2000, FFMPEG/output_320x240.jpg"
+resize_image(input_image, output_image, 320, 240)
 
 
 import subprocess
@@ -170,20 +172,22 @@ print(array)
 # 5) Create a method which applies a run-lenght encoding from a series of bytes given.
 
 def printRLE(st):
- 
+    result = ""
     n = len(st)
     i = 0
-    while i < n- 1:
- 
+    while i < n - 1:
+
         # Count occurrences of current character
         count = 1
         while (i < n - 1 and st[i] == st[i + 1]):
             count += 1
             i += 1
         i += 1
- 
-        # Print character and its count
-        print(st[i - 1] + str(count), end = "")
+
+        # Append character and its count to result
+        result += st[i - 1] + str(count)
+
+    return result
  
 #example found on the internet
 st = "wwwwaaadexxxxxxywww"

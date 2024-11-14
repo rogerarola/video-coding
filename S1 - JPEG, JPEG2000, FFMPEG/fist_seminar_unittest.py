@@ -6,7 +6,7 @@ class TestRGBtoYUV(unittest.TestCase):
     def test_rgb_to_yuv_conversion(self):
         rgb1 = RGBtoYUV(16, 128, 128)
         yuv_values = rgb1.conversor()
-        expected_yuv = [88.5, 143.625, 104.875]
+        expected_yuv = [97.625, 145.125, 79.5]
         self.assertAlmostEqual(yuv_values[0], expected_yuv[0], places=1)
         self.assertAlmostEqual(yuv_values[1], expected_yuv[1], places=1)
         self.assertAlmostEqual(yuv_values[2], expected_yuv[2], places=1)
@@ -15,15 +15,15 @@ class TestYUVtoRGB(unittest.TestCase):
     def test_yuv_to_rgb_conversion(self):
         yuv1 = YUVtoRGB(97.625, 145.125, 79.5)
         rgb_values = yuv1.conversor()
-        expected_rgb = [180.234, 127.953, 97.877]
+        expected_rgb = [17.6055, 127.729, 129.5526]
         self.assertAlmostEqual(rgb_values[0], expected_rgb[0], places=1)
         self.assertAlmostEqual(rgb_values[1], expected_rgb[1], places=1)
         self.assertAlmostEqual(rgb_values[2], expected_rgb[2], places=1)
 
 class TestImageResize(unittest.TestCase):
     def test_resize_image(self):
-        input_path = "test_image.jpg"
-        output_path = "output_test.jpg"
+        input_path = "/Users/rogerarolaplanas/Documents/GitHub/video-coding/S1 - JPEG, JPEG2000, FFMPEG/image.jpg"
+        output_path = "/Users/rogerarolaplanas/Documents/GitHub/video-coding/S1 - JPEG, JPEG2000, FFMPEG/output_320x240.jpg"
         resize_image(input_path, output_path, 320, 240)
         # Additional validation for output file dimensions would require checking file properties.
 
@@ -36,9 +36,7 @@ class TestSerpentine(unittest.TestCase):
 
 class TestRLE(unittest.TestCase):
     def test_printRLE(self):
-        with self.assertLogs() as captured:
-            printRLE("wwwwaaadexxxxxxywww")
-            self.assertIn("w4a3d1e1x6y1w3", captured.output[0])
+        self.assertEqual(printRLE("wwwwaaadexxxxxxywww"), "w4a3d1e1x6y1w3")
 
 class TestDCT(unittest.TestCase):
     def test_dct_and_idct(self):
