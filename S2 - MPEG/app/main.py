@@ -8,6 +8,7 @@ app = FastAPI()
 UPLOAD_FOLDER = "./app/videos"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+
 #1
 @app.post("/modify-resolution/")
 async def modify_resolution(file: UploadFile, resolution: str = Form(...)):
@@ -26,6 +27,7 @@ async def modify_resolution(file: UploadFile, resolution: str = Form(...)):
     os.remove(input_path)
     return {"message": f"Resolution modified. Saved as {output_path}"}
 
+
 #2
 @app.post("/modify-chroma/")
 async def modify_chroma(file: UploadFile, pix_fmt: str = Form(...)):
@@ -42,6 +44,7 @@ async def modify_chroma(file: UploadFile, pix_fmt: str = Form(...)):
 
     os.remove(input_path)
     return {"message": f"Chroma subsampling modified. Saved as {output_path}"}
+
 
 #3
 @app.post("/video-info/")
@@ -61,6 +64,7 @@ async def video_info(file: UploadFile):
 
     os.remove(input_path)
     return {"video_info": result.stdout}
+
 
 #4
 @app.post("/create-container/")
@@ -111,6 +115,7 @@ async def create_container(file: UploadFile):
 
     return {"message": f"Packaged output saved as {packaged_output}"}
 
+
 #5
 @app.post("/count-tracks/")
 async def count_tracks(file: UploadFile):
@@ -135,6 +140,7 @@ async def count_tracks(file: UploadFile):
 
     return {"num_tracks": num_tracks, "message": f"The file contains {num_tracks} track(s)."}
 
+
 #6
 @app.post("/macroblocks/")
 async def visualize_macroblocks(file: UploadFile):
@@ -151,6 +157,7 @@ async def visualize_macroblocks(file: UploadFile):
 
     os.remove(input_path)
     return {"message": f"Macroblock visualization saved as {output_path}"}
+
 
 #7
 @app.post("/yuv-histogram/")
