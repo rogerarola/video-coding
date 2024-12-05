@@ -66,32 +66,50 @@ async def video_info(file: UploadFile):
 @app.post("/create-container/")
 async def create_container(file: UploadFile):
     input_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    output_folder = UPLOAD_FOLDER
-    output_path = os.path.join(output_folder, "output_bbb.mp4")
+    output_video = os.path.join(UPLOAD_FOLDER, "output_bbb_20s.mp4")
+    aac_audio = os.path.join(UPLOAD_FOLDER, "output_aac.m4a")
+    mp3_audio = os.path.join(UPLOAD_FOLDER, "output_mp3.mp3")
+    ac3_audio = os.path.join(UPLOAD_FOLDER, "output_ac3.ac3")
+    packaged_output = os.path.join(UPLOAD_FOLDER, "packaged_bbb.mp4")
 
     with open(input_path, "wb") as f:
         f.write(await file.read())
 
-    #audio and video processing with FFmpeg
+    #cut the video to 20 seconds
     subprocess.run([
-        "ffmpeg", "-i", input_path, "-t", "20", "-c:v", "libx264", 
-        "-c:a", "aac", "-ac", "1", os.path.join(output_folder, "output_aac.m4a")
-    ])
-    subprocess.run([
-        "ffmpeg", "-i", input_path, "-t", "20", "-c:v", "libx264", 
-        "-c:a", "mp3", "-ac", "2", "-b:a", "128k", os.path.join(output_folder, "output_mp3.mp3")
-    ])
-    subprocess.run([
-        "ffmpeg", "-i", input_path, "-t", "20", "-c:v", "libx264", 
-        "-c:a", "ac3", os.path.join(output_folder, "output_ac3.ac3")
-    ])
-    subprocess.run([
-        "ffmpeg", "-i", input_path, "-t", "20", "-map", "0:v", "-map", "0:a", 
-        "-c:v", "libx264", "-c:a", "aac", output_path
+        "ffmpeg", "-i", input_path, "-t", "20", "-c:v", "libx264", "-an", output_video
     ])
 
+    #export AAC
+    subprocess.run([
+        "ffmpeg", "-i", input_path, "-t", "20", "-vn", "-c:a", "aac", "-ac", "1", aac_audio
+    ])
+
+    #export MP3
+    subprocess.run([
+        "ffmpeg", "-i", input_path, "-t", "20", "-vn", "-c:a", "mp3", "-b:a", "128k", "-ac", "2", mp3_audio
+    ])
+
+    #export AC3
+    subprocess.run([
+        "ffmpeg", "-i", input_path, "-t", "20", "-vn", "-c:a", "ac3", ac3_audio
+    ])
+
+    #package all tracks into a single MP4 container
+    subprocess.run([
+        "ffmpeg", "-i", output_video, "-i", aac_audio, "-i", mp3_audio, "-i", ac3_audio,
+        "-map", "0:v", "-map", "1:a", "-map", "2:a", "-map", "3:a",
+        "-c:v", "copy", "-c:a", "copy", packaged_output
+    ])
+
+    #clean up
     os.remove(input_path)
-    return {"message": f"BBB container created at {output_path}"}
+    os.remove(output_video)
+    os.remove(aac_audio)
+    os.remove(mp3_audio)
+    os.remove(ac3_audio)
+
+    return {"message": f"Packaged output saved as {packaged_output}"}
 
 #5
 @app.post("/count-tracks/")
@@ -143,11 +161,13 @@ async def yuv_histogram(file: UploadFile):
     with open(input_path, "wb") as f:
         f.write(await file.read())
 
-    #YUV histogram using FFMPEG
+    # YUV histogram using FFmpeg
     subprocess.run([
-        "ffmpeg", "-i", input_path, "-vf", "split=2[a][b],[b]histogram,format=yuv420p[v]", "-map", "[a]", "-map", "[v]",
-        output_path
+        "ffmpeg", "-i", input_path, "-vf", "split=2[a][b],[b]histogram=display_mode=parade:scale=log:components=YUV[v]",
+        "-map", "[a]", "-map", "[v]", "-c:v", "libx264", "-preset", "fast", output_path
     ])
 
+    #clean up
     os.remove(input_path)
     return {"message": f"YUV histogram saved as {output_path}"}
+
