@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+numpy
+pillow
+pytest
+httpx
+python-multipart
+ffmpeg-python
+streamlit
