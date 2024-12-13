@@ -1,8 +1,14 @@
 import streamlit as st
-from app.services.video_converter import video_converter
-from app.services.encoding_ladder import encoding_ladder
+import sys
+from pathlib import Path
 import os
 import shutil
+
+# Add the app directory to the system path to ensure Python can find the modules
+sys.path.append(str(Path(__file__).resolve().parent))
+
+from services.video_converter import video_converter
+from services.encoding_ladder import encoding_ladder
 
 # Custom CSS for green background and styles
 st.markdown(
