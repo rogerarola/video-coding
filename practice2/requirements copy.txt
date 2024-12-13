@@ -7,4 +7,3 @@ httpx
 python-multipart
 ffmpeg-python
 streamlit
-shutil
